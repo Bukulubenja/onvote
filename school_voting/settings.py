@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 
 SECRET_KEY =('django-insecure-i7)gr1w0t8^!7y$g_084n-p^6&k&%0%!5-ww5dxg(@=&qxwh8_')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG","False").lower() == "true"
+DEBUG = "False"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,12 +82,10 @@ WSGI_APPLICATION = 'school_voting.wsgi.application'
 
 
 DATABASES = {
-    "default":{
-    "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR/"db.sqlite3"
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
