@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
-# 'django-insecure-i7)gr1w0t8^!7y$g_084n-p^6&k&%0%!5-ww5dxg(@=&qxwh8_'
 
+# 'django-insecure-i7)gr1w0t8^!7y$g_084n-p^6&k&%0%!5-ww5dxg(@=&qxwh8_'
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-default-key-change-this"
+)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False").lower() == "true"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
 
 
 # Application definition
@@ -74,17 +79,17 @@ WSGI_APPLICATION = 'school_voting.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
+
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'votedb',
-        'USER': 'postgres',
-        'PASSWORD': 'Seetaboy@1',
-        'HOST': 'localhost',
-        'PORT': '9999',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
-database_url = os.environ.get("DATABASE_URL")
+
+
 # DATABASES["default"] = 
 #postgresql://vote_glzb_user:kDNxws6mVQSTa8xYaydsb0JndfkFvnVW@dpg-d8opum8js32c738k8fu0-a.ohio-postgres.render.com/vote_glzb
 
@@ -128,3 +133,5 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATIC_URL = '/static/'
