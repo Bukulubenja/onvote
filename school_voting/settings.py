@@ -23,11 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-# 'django-insecure-i7)gr1w0t8^!7y$g_084n-p^6&k&%0%!5-ww5dxg(@=&qxwh8_'
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-    "django-insecure-default-key-change-this"
-)
+# 
+SECRET_KEY =('django-insecure-i7)gr1w0t8^!7y$g_084n-p^6&k&%0%!5-ww5dxg(@=&qxwh8_')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False").lower() == "true"
 
@@ -84,18 +81,12 @@ WSGI_APPLICATION = 'school_voting.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
+    "default":{
+    "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR/"db.sqlite3"
+    }
 }
 
-
-# DATABASES["default"] = 
-#postgresql://vote_glzb_user:kDNxws6mVQSTa8xYaydsb0JndfkFvnVW@dpg-d8opum8js32c738k8fu0-a.ohio-postgres.render.com/vote_glzb
-
-
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
