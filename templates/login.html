@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Voting System Login</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(
+        135deg,
+        #003152 0%,
+        #00233b 100%
+    );
+}
+
+.container{
+    width:90%;
+    max-width:1100px;
+    background:white;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+    display:flex;
+}
+
+.left{
+    width:50%;
+    background:#003152;
+    color:white;
+    padding:50px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.logo{
+    width:140px;
+    height:140px;
+    margin-bottom:20px;
+}
+
+.school-name{
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.tagline{
+    text-align:center;
+    color:#ffcc99;
+    font-size:16px;
+}
+
+.right{
+    width:50%;
+    padding:60px;
+    position:relative;
+}
+
+h2{
+    color:#003152;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#666;
+    margin-bottom:30px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group input{
+    width:100%;
+    padding:15px;
+    border:2px solid #ddd;
+    border-radius:12px;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.input-group input:focus{
+    border-color:#003152;
+    outline:none;
+}
+
+.login-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#003152;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.login-btn:hover{
+    background:#ffcc99;
+    color:#003152;
+}
+
+.error{
+    background:#ffe5e5;
+    color:red;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.illustration{
+    width:100%;
+    max-width:300px;
+    display:block;
+    margin:20px auto 0;
+}
+
+.footer-text{
+    margin-top:20px;
+    text-align:center;
+    color:#777;
+    font-size:14px;
+}
+
+@media(max-width:900px){
+
+.container{
+    flex-direction:column;
+}
+
+.left,
+.right{
+    width:100%;
+}
+
+.left{
+    padding:30px;
+}
+
+.logo{
+    width:100px;
+    height:100px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT SIDE -->
+    <div class="left">
+
+        <!-- Replace with your school logo -->
+        <img src="{% static 'images/Picture1.png' %}" class="logo" alt="School Logo">
+
+        <div class="school-name">
+            ST KIZITO S.S KABOWA
+        </div>
+
+        <div class="tagline">
+            Student Voting System
+            <br>
+            Vision & Integrity
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+
+        <h2>Welcome Back</h2>
+        <p class="subtitle">
+            Sign in to continue to the voting portal
+        </p>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Student ID"
+                    required>
+            </div>
+
+            <div class="input-group">
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                LOGIN
+            </button>
+
+        </form>
+
+        <!-- Replace with your education image -->
+        <div class="footer-text">
+            © {% now "Y" %} Student Voting System  By BenVision company
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
