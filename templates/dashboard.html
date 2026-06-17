@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: #0b1f3a;
+            color: white;
+            position: fixed;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #ffcc99;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #1c3d66;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 240px;
+            padding: 20px;
+        }
+
+        /* TOP BAR */
+        .topbar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            font-size: 20px;
+            color: #0b1f3a;
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .card h2 {
+            color: #0b1f3a;
+            font-size: 26px;
+        }
+
+        .card p {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* RESULTS */
+        .panel {
+            background: white;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .position-title {
+            background: #0b1f3a;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .candidate {
+            margin-bottom: 15px;
+        }
+
+        .candidate-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 26px;
+            background: #e9ecef;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffcc99, #ff9f43);
+            text-align: center;
+            line-height: 26px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: width 0.8s ease-in-out;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🗳 Admin Panel</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Voters</a>
+    <a href="#">Candidates</a>
+    <a href="#">Positions</a>
+    <a href="#">Results</a>
+    <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="topbar">
+        <h1>Election Overview Dashboard</h1>
+        <div>Welcome Admin</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="card">
+            <h2>{{ total_voters }}</h2>
+            <p>Total Voters</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ total_votes }}</h2>
+            <p>Votes Cast</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ total_positions }}</h2>
+            <p>Positions</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ turnout }}%</h2>
+            <p>Turnout</p>
+        </div>
+
+    </div>
+
+    <!-- RESULTS -->
+    {% for result in results %}
+
+    <div class="panel">
+
+        <div class="position-title">
+            {{ result.position.title }}
+        </div>
+
+        {% for item in result.candidates %}
+
+        <div class="candidate">
+
+            <div class="candidate-info">
+                <span>{{ item.candidate.name }}</span>
+                <span>{{ item.votes }} votes</span>
+            </div>
+
+            <div class="bar-container">
+                <div class="bar" style="width: {{ item.percentage|default:0 }}%;">
+                    {{ item.percentage }}%
+                </div>
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
