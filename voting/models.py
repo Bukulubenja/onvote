@@ -19,7 +19,7 @@ password = ''.join(
 #     password=password
 # )
 
-class Class(models.Model):
+class Class_name(models.Model):
     name = models.CharField(max_length=20)
 
 #create voters
@@ -28,7 +28,7 @@ class Voter(models.Model):
 
     student_id = models.CharField(max_length=20, unique=True)
 
-    class_name = models.ForeignKey(Class, on_delete=models.CASCADE)
+    class_name = models.ForeignKey(Class_name, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.student_id
@@ -51,7 +51,7 @@ class Candidate(models.Model):
 
     name = models.CharField(max_length=100)
 
-    class_name = models.ForeignKey(Class, on_delete=models.CASCADE)
+    class_name = models.ForeignKey(Class_name, on_delete=models.CASCADE)
 
     # photo = models.ImageField(
     #     upload_to='candidates/'
