@@ -4,6 +4,8 @@
     <title>Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -39,7 +41,6 @@
             padding: 12px;
             margin-bottom: 10px;
             border-radius: 8px;
-            transition: 0.3s;
         }
 
         .sidebar a:hover {
@@ -63,12 +64,6 @@
             align-items: center;
         }
 
-        .topbar h1 {
-            font-size: 20px;
-            color: #0b1f3a;
-        }
-
-        /* STATS */
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -80,8 +75,8 @@
             background: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .card h2 {
@@ -89,12 +84,6 @@
             font-size: 26px;
         }
 
-        .card p {
-            color: #666;
-            margin-top: 5px;
-        }
-
-        /* RESULTS */
         .panel {
             background: white;
             margin-top: 20px;
@@ -113,6 +102,8 @@
 
         .candidate {
             margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 10px;
         }
 
         .candidate-info {
@@ -137,7 +128,6 @@
             line-height: 26px;
             font-size: 12px;
             font-weight: bold;
-            transition: width 0.8s ease-in-out;
         }
 
         /* RESPONSIVE */
@@ -174,21 +164,22 @@
     <a href="#">Voters</a>
     <a href="#">Candidates</a>
     <a href="#">Positions</a>
-    <a href="#">Results</a>
     <a href="{% url 'logout' %}">Logout</a>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
+    <!-- TOPBAR -->
     <div class="topbar">
         <h1>Election Overview Dashboard</h1>
-        <div>Welcome Admin</div>
+        <span style="background:#0b1f3a;color:white;padding:8px 12px;border-radius:20px;">
+            🔴 LIVE
+        </span>
     </div>
 
     <!-- STATS -->
     <div class="stats">
-
         <div class="card">
             <h2>{{ total_voters }}</h2>
             <p>Total Voters</p>
@@ -208,7 +199,6 @@
             <h2>{{ turnout }}%</h2>
             <p>Turnout</p>
         </div>
-
     </div>
 
     <!-- RESULTS -->
@@ -218,14 +208,30 @@
 
         <div class="position-title">
             {{ result.position.title }}
+
+            {% if result.candidates %}
+            <span style="float:right;background:#28a745;padding:5px 10px;border-radius:20px;font-size:12px;">
+                🏆 Leader: {{ result.candidates.0.candidate.name }}
+            </span>
+            {% endif %}
         </div>
 
         {% for item in result.candidates %}
 
-        <div class="candidate">
+        <div class="candidate"
+             style="{% if forloop.first %}background:#e8fff0;border-left:5px solid #28a745;
+                    {% elif forloop.counter == 2 %}background:#f8f9fa;border-left:5px solid #007bff;
+                    {% endif %}">
 
             <div class="candidate-info">
-                <span>{{ item.candidate.name }}</span>
+                <span>
+                    {% if forloop.first %}🥇
+                    {% elif forloop.counter == 2 %}🥈
+                    {% elif forloop.counter == 3 %}🥉
+                    {% endif %}
+                    {{ item.candidate.name }}
+                </span>
+
                 <span>{{ item.votes }} votes</span>
             </div>
 
@@ -234,16 +240,52 @@
                     {{ item.percentage }}%
                 </div>
             </div>
-
         </div>
 
         {% endfor %}
+
+        <!-- CHART -->
+        <canvas id="chart-{{ result.position.id }}" style="margin-top:20px;"></canvas>
 
     </div>
 
     {% endfor %}
 
 </div>
+
+<!-- CHART SCRIPT -->
+<script>
+    
+{% for result in results %}
+
+new Chart(document.getElementById("chart-{{ result.position.id }}"), {
+    type: 'bar',
+    data: {
+        labels: [
+            {% for item in result.candidates %}
+                "{{ item.candidate.name }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            label: "Votes",
+            data: [
+                {% for item in result.candidates %}
+                    {{ item.votes }},
+                {% endfor %}
+            ],
+            backgroundColor: "#0b1f3a"
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+
+{% endfor %}
+</script>
 
 </body>
 </html>
