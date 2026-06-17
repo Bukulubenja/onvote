@@ -1,3 +1,83 @@
-<h2>You have already voted.</h2>
-<p>You cannot vote again.</p>
-<a href="/logout/">Logout</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Already Voted</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 420px;
+        }
+
+        h2 {
+            color: #dc3545; /* red warning */
+        }
+
+        p {
+            color: #555;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #343a40;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #23272b;
+        }
+
+        .warning {
+            font-size: 14px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>You have already voted</h2>
+
+    <p>
+        Our system shows that your vote has already been recorded.<br>
+        You are not allowed to vote more than once.
+    </p>
+
+    <a class="btn" href="/logout/">Logout</a>
+
+    <p class="warning">
+        If you believe this is a mistake, contact the election administrator.
+    </p>
+</div>
+
+<script>
+    setTimeout(() => {
+        window.location.href = "/logout/";
+    }, 6000);
+</script>
+
+
+</body>
+</html>

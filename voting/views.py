@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -35,27 +36,24 @@ def vote_view(request):
     voter = get_object_or_404(Voter, user=request.user)
     if Vote.objects.filter(voter=voter).exists():
         return render(request, "already_voted.html")
+    with transaction.atomic():
+        positions = Position.objects.all()
+        candidates = Candidate.objects.all()
 
-    positions = Position.objects.all()
-    candidates = Candidate.objects.all()
+        if request.method == "POST":
+            
 
+            for position in positions:
 
-    if request.method == "POST":
+                selected_candidate = request.POST.get(str(position.id))
 
-        for position in positions:
+                if selected_candidate:
 
-            selected_candidate = request.POST.get(str(position.id))
-
-            if selected_candidate:
-
-                Vote.objects.create(
-                    voter=voter,
-                    position=position,
-                    candidate_id=selected_candidate
-                )
-
-        voter.has_voted = True
-        voter.save()
+                    Vote.objects.create(
+                        voter=voter,
+                        position=position,
+                        candidate_id=selected_candidate
+                    )
 
         return render(request, "success.html")
 
@@ -67,3 +65,12 @@ def vote_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+
+
+def success_page(request):
+    response = render(request, "success.html")
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response["Pragma"] = "no-cache"
+    response["Expires"] = "0"
+    return response
