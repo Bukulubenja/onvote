@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 
 SECRET_KEY =('django-insecure-i7)gr1w0t8^!7y$g_084n-p^6&k&%0%!5-ww5dxg(@=&qxwh8_')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "False"
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -83,7 +83,8 @@ WSGI_APPLICATION = 'school_voting.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
     )
 }
 
@@ -123,9 +124,3 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
-
-
-
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
